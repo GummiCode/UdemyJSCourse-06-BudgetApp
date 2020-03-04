@@ -1,0 +1,50 @@
+Notes
+
+1. Concept and Scheme
+
+At the start of a coding project the aims of the project should be scoped out, and a cheme for this should be created.
+
+Consider this budgeting app. It needs to do the following:
+
+	1. Provide a form for providing name and value of an income our outgoing.
+	2. Include a field for choosing whether the value is an income or outgoing.
+	3. Include an event handler to process the values when a button is clicked.
+	4. Tablate each incoming
+	5. Tablate each outgoing.
+	6. Show total ingoings.
+	7. Show totaloutgoings.
+	8. Show current credit calculated from total income and outgoing.
+	9. Include an indication of the % of total income that income represents.
+	10. Indicate the % of total income that that outgoing represents.
+
+With small tasks we may eb able to just bash out some code, but for a project we should identify our aims and the steps required to fulfil that aim before we start.
+
+/////////////////////////////////////////
+
+2. Modules
+
+When planning a project it can help to break down the discrete tasks into modules.
+
+Modules are basically distinct pieces of code that perform distinct functions.
+
+	For example, in this budgeting app some functions process input data, calculating them into values. We could call this our Data Module.
+
+	Other functions control the presentation of this data to the GUI. We could call these functions our UI Module.
+
+	We also require an Event Handler for the data input. This could be called an Event Module, or Controller Module.
+
+Over time you'll develop your own sense of useful module categories, and your own user-friendly module structures. But separating things like data and the UI is sensible and common.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+So, how do we actually write modules?
+
+IFFYs!
+
+Modules are commonly written as IFFYs. This keeps them private, preventing variable contamination and allowing us to focus on them independantly.
+
+It also keeps the code out of visibility to the user. It hides the implementation details.
+
+The public part of the database is sometimes called an API.
+
+This is called DATA ENCAPSULATION.

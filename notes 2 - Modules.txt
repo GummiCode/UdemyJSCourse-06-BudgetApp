@@ -1,0 +1,51 @@
+These notes regard the modules in the 'app' file.
+
+
+// Module : Budget Controller
+
+let budgetController = (function () {
+/////////////////////////////
+// A module can be broken up into 2 parts:The private space, and the public space.
+//The private space consists of all of the variables declared in the normal way, as below.
+//These lines are in private scope.
+let x = 23;
+
+let add = (a) => {
+return x + a;};
+
+
+/* the second part is the public space.
+ We 'return' an object literal using the return keyword. 
+ This object contains the functions and variables that we want to make public.
+ As the object literal is returned by the iffy, its contents are placed in the public scope when the iffy (automatically) declares.
+
+
+Note that the functions within are declared using : rather than =, eg. publicTest:
+This is because the function isn't an object in its own right,
+rather, we are returning an OBJECT LITERAL, an anonymous object, consisting of everything within the {},
+and public Test is an element within it, which is why it is assigned using :.
+
+*/
+
+return {
+	 publicTest: function(b) {
+		 console.log (add (b));
+	 },
+
+	 testA: function (ax, bx) {
+		console.log (ax + bx);
+	},
+};
+
+// NOTE: You can only include one 'return' within a block
+// Block is a new word for us! It means within one set of curly braces. It's a scope/context :3
+
+/* CLOSURES are also relevant here.
+The public functions above can still access the privately declared variables 'x' and 'add'
+because after the IFFY resolves they're still stored in the closure,
+and a function can access variables from its native scope even after it has closed because thse variables are stored in the closure.
+
+
+/////////////////////////////
+})();
+
