@@ -23,19 +23,17 @@ let Income = function (id, description, value) {
 let data = {
 	
 	allItems = {
-		expenses : [],
+		exp : [],
 
-		incomes : [],
+		inc : [],
 	},
 	
 	totals = {
-		expenses : 0,
-		incomes : 0,
+		exp : 0,
+		inc : 0,
 	},
 
 };
-
-
 
 
 
@@ -43,9 +41,25 @@ let data = {
 // Public Space
 
 return {
-	
+
+	addItem: function (type, des, val) {  			//Type, Description & Value
+
+		let newItem;
+		
+		ID = 0;										// We'll change ID to an ID generator later.
+
+		if (type === 'exp') {
+			newItem = new Expense(ID, des, val);	// Calling the expense constructor from above, passing in ID, des, val
+		} else if (type === 'inc') {
+			newItem = new Income(ID, des, val);
+		};
+
+		data.allItems[type].push(newItem);			//Adds the new item to the end of the Expenses/Income array dependant on which it is!
+
+		return newItem;
 
 
+	};	
 
 
 };
