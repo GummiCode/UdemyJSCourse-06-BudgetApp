@@ -46,9 +46,11 @@ return {
 
 		let newItem;
 		
-		ID = 0;										// We'll change ID to an ID generator later.
+		ID = data.allItems[type][data.allItems[type].length - 1];		// Assigns an ID +1 of the last number in ID array.
+																		// think about other ID systems we could use :3
 
-		if (type === 'exp') {
+
+		if (type === 'exp') {						// Creates new item (either an inc or exp.
 			newItem = new Expense(ID, des, val);	// Calling the expense constructor from above, passing in ID, des, val
 		} else if (type === 'inc') {
 			newItem = new Income(ID, des, val);
@@ -56,7 +58,8 @@ return {
 
 		data.allItems[type].push(newItem);			//Adds the new item to the end of the Expenses/Income array dependant on which it is!
 
-		return newItem;
+		return newItem;								// Returns the new item, so that the module calling this function can access it too,
+													//for future reasons!
 
 
 	};	
