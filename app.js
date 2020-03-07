@@ -22,13 +22,13 @@ let Income = function (id, description, value) {
 
 let data = {
 	
-	allItems = {
+	allItems: {
 		exp : [],
 
 		inc : [],
 	},
 	
-	totals = {
+	totals: {
 		exp : 0,
 		inc : 0,
 	},
@@ -44,11 +44,14 @@ return {
 
 	addItem: function (type, des, val) {  			//Type, Description & Value
 
-		let newItem;
+		let newItem, ID;
 		
-		ID = data.allItems[type][data.allItems[type].length - 1];		// Assigns an ID +1 of the last number in ID array.
-																		// think about other ID systems we could use :3
-
+		if(data.allItems[type].length >0) {
+			ID = data.allItems[type][data.allItems[type].length - 1].id + 1;		// Assigns an ID +1 of the last number in ID array.
+																					// think about other ID systems we could use :3
+		} else {
+			ID = 0;
+		};
 
 		if (type === 'exp') {						// Creates new item (either an inc or exp.
 			newItem = new Expense(ID, des, val);	// Calling the expense constructor from above, passing in ID, des, val
@@ -60,10 +63,11 @@ return {
 
 		return newItem;								// Returns the new item, so that the module calling this function can access it too,
 													//for future reasons!
+		},	
 
-
-	};	
-
+	testing: function () {
+		console.log (data);
+	},
 
 };
 
@@ -144,20 +148,27 @@ let  controller = (function (budgetCtrl, UICtrl) {
 	
 
 	let ctrlAddItem = function (){
-
+			// let input, newItem			< this is old syntax. We don't need to pre-define these.
 		
 			
 			// 1. Insert function for getting the field input data,
-
 			let input = UIController.getInput();
 			console.log(input); 
 
-/*			2. add the collected data to the budget controller as an item and value,
-			3. Ass the item to the UI
+			// 2. add the collected data to the budget controller as an item and value,
+			let newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+
+			
+
+
+
+/*			3. Ass the item to the UI
 			4. Calculate the budget
 			5. Display the budget on the UI
 */
 		};
+
+
 
 
 	//////////////////////////
