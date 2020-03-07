@@ -99,7 +99,7 @@ let DOMStrings = {
 
 return {
 
-	getInput: function ()  {								// this block returns an object literal containing the inpout values
+	getInput : function ()  {								// this block returns an object literal containing the inpout values
 		return {
 		type : document.querySelector(DOMStrings.inputType).value,  //returns 'inc' or 'exp' string for income/expense.
 		description : document.querySelector(DOMStrings.inputDescription).value,
@@ -107,7 +107,51 @@ return {
 		};
 	},
 
-	getDOMStrings: function () { // This block exposes the DOMStrings to the public/global scope for other modules to access.
+
+	addListItem : function(obj, type) {
+		
+		// create HTML in this JS file in the form of a string, with some placeholder text
+		let html, newhtml;
+
+		if (type === `inc`) {
+			html = `
+				<div class="item clearfix" id="income-%id%">
+                            <div class="item__%description%">Salary</div>
+                            <div class="right clearfix">
+                                <div class="item__%value%">+ 2,100.00</div>
+                                <div class="item__delete">
+                                    <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
+                                </div>
+                            </div>
+                        </div>
+		`;
+		} else if (type === `exp`) {
+			html = `
+				<div class="item clearfix" id="expense-%id%">
+                            <div class="item__%description%">Apartment rent</div>
+                            <div class="right clearfix">
+                                <div class="item__%value%">- 900.00</div>
+                                <div class="item__percentage">21%</div>
+                                <div class="item__delete">
+                                    <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
+                                </div>
+                            </div>
+                        </div>
+		`;
+		};
+		// Replace the placeolder text with input data ('descriptiuon')
+
+		newhtml = html.replace(`%id%`, obj.id);
+		newhtml = html.replace(`%description%`, obj.description);
+		newhtml = html.replace(`%value%`, obj.value);
+
+		// Insert the string HTML from this file into the DOM as actual HTML
+
+		
+
+	},
+
+	getDOMStrings : function () { // This block exposes the DOMStrings to the public/global scope for other modules to access.
 		return DOMStrings;
 	},
 
