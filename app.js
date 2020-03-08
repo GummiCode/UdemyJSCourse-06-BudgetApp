@@ -77,7 +77,7 @@ return {
 
 
 
-//Module 2: User Interface (UI) Module
+//Module 2: User Interface (UI) Controller Module
 
 let  UIController = (function () {
 
@@ -88,7 +88,9 @@ let DOMStrings = {
 	inputType: 	'.add__type',
 	inputDescription: '.add__description',
 	inputValue:	'.add__value',
-	inputButton: '.add__btn'
+	inputButton: '.add__btn',
+	incomeContainer: '.income__list',		//These will be used to point to the placed in the HTML document
+	expensesContainer: '.expenses__list',		//where we'll insert code for our various items.
 };
 
 
@@ -111,14 +113,15 @@ return {
 	addListItem : function(obj, type) {
 		
 		// create HTML in this JS file in the form of a string, with some placeholder text
-		let html, newhtml;
+		let html, newhtml, element;
 
 		if (type === `inc`) {
+			element = DOMStrings.incomeContainer;
 			html = `
 				<div class="item clearfix" id="income-%id%">
-                            <div class="item__%description%">Salary</div>
+                            <div class="item__description">%description%</div>
                             <div class="right clearfix">
-                                <div class="item__%value%">+ 2,100.00</div>
+								<div class="item__value">+ %value%</div>
                                 <div class="item__delete">
                                     <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
                                 </div>
@@ -126,11 +129,12 @@ return {
                         </div>
 		`;
 		} else if (type === `exp`) {
+			element = DOMStrings.expensesContainer;
 			html = `
 				<div class="item clearfix" id="expense-%id%">
-                            <div class="item__%description%">Apartment rent</div>
+                            <div class="item__description">%description%</div>
                             <div class="right clearfix">
-                                <div class="item__%value%">- 900.00</div>
+                                <div class="item__value">- %value%</div>
                                 <div class="item__percentage">21%</div>
                                 <div class="item__delete">
                                     <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
@@ -139,13 +143,20 @@ return {
                         </div>
 		`;
 		};
-		// Replace the placeolder text with input data ('descriptiuon')
+		// Replace the placeolder text with input data ('id', 'description', 'value')
 
 		newhtml = html.replace(`%id%`, obj.id);
-		newhtml = html.replace(`%description%`, obj.description);
-		newhtml = html.replace(`%value%`, obj.value);
+		console.log(obj.description);
+		newhtml = newhtml.replace(`%description%`, obj.description);
+		newhtml = newhtml.replace(`%value%`, obj.value);
 
 		// Insert the string HTML from this file into the DOM as actual HTML
+		// We'll insert it in the beforeend position
+
+		document.querySelector(element).insertAdjacentHTML('beforeend', newhtml);
+
+
+
 
 		
 
@@ -192,22 +203,21 @@ let  controller = (function (budgetCtrl, UICtrl) {
 	
 
 	let ctrlAddItem = function (){
-			// let input, newItem			< this is old syntax. We don't need to pre-define these.
+			let input, newItem
 		
 			
 			// 1. Insert function for getting the field input data,
-			let input = UIController.getInput();
+			input = UIController.getInput();
 			console.log(input); 
 
 			// 2. add the collected data to the budget controller as an item and value,
-			let newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+			newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
 			
+			//3. Add the item to the UI
+			UIController.addListItem(newItem, input.type);
 
-
-
-/*			3. Ass the item to the UI
-			4. Calculate the budget
+/*			4. Calculate the budget
 			5. Display the budget on the UI
 */
 		};
