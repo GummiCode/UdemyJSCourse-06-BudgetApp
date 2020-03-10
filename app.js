@@ -232,26 +232,33 @@ let  controller = (function (budgetCtrl, UICtrl) {
 	};
 
 	let ctrlAddItem = function (){
-			let input, newItem
+			let input, newItem;
 		
 			
 			// 1. Insert function for getting the field input data,
 			input = UIController.getInput();
 			console.log(input); 
 
-			// 2. add the collected data to the budget controller as an item and value,
+			// 2. Check that the description field is not empty,
+			// & check that a number (!isNaN) is entered in the Value field,
+			// & checks that the value is not 0.
+			if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
+
+			// 3. add the collected data to the budget controller as an item and value,
 			newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
 			
-			//3. Add the item to the UI
+			// 4. Add the item to the UI
 			UIController.addListItem(newItem, input.type);
 
-			//4. Clear the fields.
+			// 5. Clear the fields.
 			UIController.clearFields();
 
 
-			//5. Calculate and update budget.
+			// 6. Calculate and update budget.
 			updateBudget();
+
+			};
 		};
 
 
