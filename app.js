@@ -19,6 +19,14 @@ let Income = function (id, description, value) {
 	this.value = value;
 };
 
+let calculateTotal = function (type) {					//type = exp or inc :3
+	let sum = 0;										//sum will be used to store the total value incrementally
+	data.addItemallItems[type].forEach(function (cur){	//We're passing in the current element as 'cur'
+		sum += cur.value;								// sum aggregates all the values							
+	});
+	data.totals[type] = sum;							// this passes the total into the data object below :3
+
+};
 
 let data = {
 	
@@ -32,6 +40,10 @@ let data = {
 		exp : 0,
 		inc : 0,
 	},
+
+	budget : 0,
+
+	percentage: -1,     		//-1 is a value commonly used to show that a value doesn't exist yet. It's palceholder syntax.
 
 };
 
@@ -64,6 +76,18 @@ return {
 		return newItem;								// Returns the new item, so that the module calling this function can access it too,
 													//for future reasons!
 		},	
+
+
+		calculateBudget = function () {
+
+
+			// Calculate total income and expenses
+
+			//Calculate the budget (income - expenses)
+
+			//Calculate the % of the total income already spent
+		},
+		}
 
 	testing: function () {
 		console.log (data);
@@ -224,7 +248,16 @@ let  controller = (function (budgetCtrl, UICtrl) {
 
 			//1. Calculate the budget
 
+			calculateTotal(inc);
+			calculateTotal(exp);
+
 			//2. Return the budget.
+
+			data.budget = data.totals.inc - data.totals.exp;
+
+			//Course doesn't explian why we use a decimal below for the percentage. Perhaps it will become clear...
+			cata.percentage = (data.totals.exp/data.totals.inc);  
+
 
 			//3. Display the budget on the UI
 
