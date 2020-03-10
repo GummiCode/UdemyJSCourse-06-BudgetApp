@@ -254,9 +254,7 @@ let  controller = (function (budgetCtrl, UICtrl) {
 			//2. Return the budget.
 
 			data.budget = data.totals.inc - data.totals.exp;
-
-			//Course doesn't explian why we use a decimal below for the percentage. Perhaps it will become clear...
-			cata.percentage = (data.totals.exp/data.totals.inc);  
+			data.percentage = 100* (data.totals.exp/data.totals.inc);  
 
 
 			//3. Display the budget on the UI
