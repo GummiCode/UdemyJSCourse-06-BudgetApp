@@ -105,7 +105,7 @@ return {
 		return {
 		type : document.querySelector(DOMStrings.inputType).value,  //returns 'inc' or 'exp' string for income/expense.
 		description : document.querySelector(DOMStrings.inputDescription).value,
-		value : document.querySelector(DOMStrings.inputValue).value,
+		value : parseFloat(document.querySelector(DOMStrings.inputValue).value),  //parseFloat converts a string to a floating point number.
 		};
 	},
 
@@ -158,7 +158,7 @@ return {
 
 	clearFields: function() {
 		let fields;
-		//querySelectorAll returrns a list of [X]; NOT an array.
+		//The .querySelectorAll method returrns a list of all elements in the specified document that match the specified CSS selector. Note that it returns a list ('a static NodeList object') NOT an array.
 		fields = document.querySelectorAll(`${DOMStrings.inputDescription}, ${DOMStrings.inputValue}`);
 
 		//next we convert the list to an arrya using an array method called Slice.
@@ -166,7 +166,7 @@ return {
 		//However you can also pass a list into it using a special method, and it will still return a new array.
 		// You need to call the .slice method using the .call method, and then pass the list into it, for it to work this way.
 		//These methods are stored in the array proprotype. We can access it to use these methods.
-		//It's weird syntax! You may not remember it but it's good to know that the method exists for future ref.
+		//It's weird syntax and I don't fully understand this yet! I should review it. I may not remember it but it's good to know that the method exists for future ref.
 
 		fieldsArray = Array.prototype.slice.call(fields);
 
@@ -220,7 +220,16 @@ let  controller = (function (budgetCtrl, UICtrl) {
 			})
 		};
 
-	
+	let updateBudget = function (){
+
+			//1. Calculate the budget
+
+			//2. Return the budget.
+
+			//3. Display the budget on the UI
+
+
+	};
 
 	let ctrlAddItem = function (){
 			let input, newItem
@@ -241,9 +250,8 @@ let  controller = (function (budgetCtrl, UICtrl) {
 			UIController.clearFields();
 
 
-/*			5. Calculate the budget
-			5. Display the budget on the UI
-*/
+			//5. Calculate and update budget.
+			updateBudget();
 		};
 
 
