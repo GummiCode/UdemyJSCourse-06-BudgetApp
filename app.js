@@ -11,6 +11,7 @@ let Expense = function (id, description, value) {
 	this.id = id;
 	this.description = description;
 	this.value = value;
+	this.percentage = -1;
 };
 
 let Income = function (id, description, value) {
@@ -21,7 +22,7 @@ let Income = function (id, description, value) {
 
 let calculateTotal = function (type) {					//type = exp or inc :3
 	let sum = 0;										//sum will be used to store the total value incrementally
-	data.addItemallItems[type].forEach(function (cur){	//We're passing in the current element as 'cur'
+	data.allItems[type].forEach(function (cur){			//We're passing in the current element as 'cur'
 		sum += cur.value;								// sum aggregates all the values							
 	});
 	data.totals[type] = sum;							// this passes the total into the data object below :3
@@ -65,7 +66,7 @@ return {
 			ID = 0;
 		};
 
-		if (type === 'exp') {						// Creates new item (either an inc or exp.
+		if (type === 'exp') {						// Creates new item ,either an inc or exp.
 			newItem = new Expense(ID, des, val);	// Calling the expense constructor from above, passing in ID, des, val
 		} else if (type === 'inc') {
 			newItem = new Income(ID, des, val);
@@ -78,16 +79,33 @@ return {
 		},	
 
 
-		calculateBudget = function () {
+		calculateBudget: function () {
 
 
 			// Calculate total income and expenses
+			calculateTotal('inc');
+			calculateTotal('exp');
 
 			//Calculate the budget (income - expenses)
+			data.budget = data.totals.inc - data.totals.exp;
 
-			//Calculate the % of the total income already spent
+			//Calculate the % of the total income already spent	
+			if (data.totals.inc > 0) {
+				data.percentage = Math.round (100* (data.totals.exp/data.totals.inc));  
+		 	} else {
+				 data.percentage = -1;
+			 };
 		},
-		}
+		
+		getBudget: function () {
+			return {
+				budget: data.budget,
+				totalExp: data.totals.exp,
+				totalInc: data.totals.inc,
+				percentage: data.percentage
+			};
+		},
+
 
 	testing: function () {
 		console.log (data);
@@ -233,7 +251,7 @@ let  controller = (function (budgetCtrl, UICtrl) {
 
 	let setupEventListeners = function () {		// This function contains the lines that set up the event listeners.
 
-		let DOM = UIController.getDOMStrings();  // This line adds the DOM strings (defined in UI COntroller) to this module :3
+		let DOM = UICtrl.getDOMStrings();  // This line adds the DOM strings (defined in UI COntroller) to this module :3
 
 		document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
 
@@ -247,17 +265,15 @@ let  controller = (function (budgetCtrl, UICtrl) {
 	let updateBudget = function (){
 
 			//1. Calculate the budget
-
-			calculateTotal(inc);
-			calculateTotal(exp);
+			budgetCtrl.calculateBudget();
 
 			//2. Return the budget.
-
-			data.budget = data.totals.inc - data.totals.exp;
-			data.percentage = 100* (data.totals.exp/data.totals.inc);  
+			let budget = budgetCtrl.getBudget();
 
 
 			//3. Display the budget on the UI
+			console.log(budget);
+
 
 
 	};
