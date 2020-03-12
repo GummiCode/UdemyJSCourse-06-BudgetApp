@@ -102,7 +102,7 @@ return {
 				budget: data.budget,
 				totalExp: data.totals.exp,
 				totalInc: data.totals.inc,
-				percentage: data.percentage
+				percentage: data.percentage,
 			};
 		},
 
@@ -126,6 +126,8 @@ let  UIController = (function () {
 ///////////////////////////
 //Private Space
 
+
+// We store our class names here, so that if we need to change  them we can do it just once, here, for the whole JS doc.
 let DOMStrings = {
 	inputType: 	'.add__type',
 	inputDescription: '.add__description',
@@ -133,6 +135,11 @@ let DOMStrings = {
 	inputButton: '.add__btn',
 	incomeContainer: '.income__list',		//These will be used to point to the placed in the HTML document
 	expensesContainer: '.expenses__list',		//where we'll insert code for our various items.
+	budgetLabel: '.budget__value',				//The class of the current budget display.
+	incomeLabel: '.budget__income--value',
+	expensesLabel: '.budget__expenses--value',
+	percentageLabel:	'.budget__expenses--percentage',
+
 };
 
 
@@ -199,7 +206,7 @@ return {
 	},
 
 	clearFields: function() {
-		let fields;
+		let fields, fieldsArray;
 		//The .querySelectorAll method returrns a list of all elements in the specified document that match the specified CSS selector. Note that it returns a list ('a static NodeList object') NOT an array.
 		fields = document.querySelectorAll(`${DOMStrings.inputDescription}, ${DOMStrings.inputValue}`);
 
@@ -222,7 +229,23 @@ return {
 			current.value = ""		//Clears the value of the element being looked at
 									//forEach loops this over evry value, and so they are all cleared :3
 		});
+
+		fieldsArray[0].focus();
+
 	} ,
+
+	displayBudget: function (obj) {
+
+		console.log (obj);
+		console.log(DOMStrings);
+		console.log(document.querySelector(DOMStrings.incomeLabel));
+
+	document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
+	document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
+	document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
+	document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage;
+
+	},
 
 	getDOMStrings : function () { // This block exposes the DOMStrings to the public/global scope for other modules to access.
 		return DOMStrings;
@@ -272,7 +295,7 @@ let  controller = (function (budgetCtrl, UICtrl) {
 
 
 			//3. Display the budget on the UI
-			console.log(budget);
+			UICtrl.displayBudget(budget);
 
 
 
