@@ -240,10 +240,16 @@ return {
 		console.log(DOMStrings);
 		console.log(document.querySelector(DOMStrings.incomeLabel));
 
-	document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
-	document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
-	document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
-	document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage;
+		document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
+		document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
+		document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
+
+		if (obj.percentage > 0 ) {
+			document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%';
+		} else {
+			document.querySelector(DOMStrings.percentageLabel).textContent = '-';
+
+		};
 
 	},
 
