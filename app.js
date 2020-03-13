@@ -346,9 +346,14 @@ let  controller = (function (budgetCtrl, UICtrl) {
 		return  {											
 			init: function () {						
 				setupEventListeners(); //Initialisation Function PArt 1: This function, when called, activtes the event listeners.
-			}
-		
-		};
+				UICtrl.displayBudget({
+						budget: 0,
+						totalExp: 0,
+						totalInc: 0,
+						percentage: -1,
+						});
+					},			
+				};
 
 
 	
