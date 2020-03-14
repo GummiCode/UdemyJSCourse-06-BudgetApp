@@ -139,6 +139,7 @@ let DOMStrings = {
 	incomeLabel: '.budget__income--value',
 	expensesLabel: '.budget__expenses--value',
 	percentageLabel:	'.budget__expenses--percentage',
+	container: '.container',
 
 };
 
@@ -167,7 +168,7 @@ return {
 		if (type === `inc`) {
 			element = DOMStrings.incomeContainer;
 			html = `
-				<div class="item clearfix" id="income-%id%">
+				<div class="item clearfix" id="inc-%id%">
                             <div class="item__description">%description%</div>
                             <div class="right clearfix">
 								<div class="item__value">+ %value%</div>
@@ -180,7 +181,7 @@ return {
 		} else if (type === `exp`) {
 			element = DOMStrings.expensesContainer;
 			html = `
-				<div class="item clearfix" id="expense-%id%">
+				<div class="item clearfix" id="exp-%id%">
                             <div class="item__description">%description%</div>
                             <div class="right clearfix">
                                 <div class="item__value">- %value%</div>
@@ -264,10 +265,6 @@ return {
 /////////////////////////////	
 })();
 
-
-
-
-
 //Module 3: Controller
 
 let  controller = (function (budgetCtrl, UICtrl) {
@@ -287,9 +284,14 @@ let  controller = (function (budgetCtrl, UICtrl) {
 		document.addEventListener('keypress', function (event) {
 			if (event.keycode === 13 || event.which === 13) {
 				ctrlAddItem()
-				}; 
-			})
-		};
+			}; 
+		});
+
+
+		document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+
+	};
 
 	let updateBudget = function (){
 
@@ -334,8 +336,34 @@ let  controller = (function (budgetCtrl, UICtrl) {
 			// 6. Calculate and update budget.
 			updateBudget();
 
-			};
 		};
+	};
+
+	let ctrlDeleteItem = function (event) {
+
+		let  itemID, splitID, type, ID;
+
+		 itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+
+		 if (itemID) {	//ie. if itemID exists, which is only the case for our items, so clicking other things won't activate this.
+	
+			splitID = itemID.split('-'); //the split method splits a tring after the designated character & returns both parts as an array
+			type = splitID[0];
+			ID = splitID[1];
+
+			//1. deletes item from the data strudture in JS
+
+
+
+			//2. Deletes the item from the UI in HTML
+
+
+			
+			//3. updates and shows the new budget.
+
+	 };
+
+	};
 
 
 
