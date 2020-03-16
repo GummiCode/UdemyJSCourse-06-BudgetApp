@@ -79,6 +79,18 @@ return {
 		},	
 
 
+		deleteItem: function (type, id){
+			let ids, index;
+			//the .map method performs a function on each element in an array, and returns a new array using the outputs.
+			ids =	data.allItems[type].map(function(current){
+			return current.id;
+			index = ids.indexOf(id);
+			if (index !== -1) {
+				data.allItems[type].splice(index, 1);
+			};
+		});
+		},
+
 		calculateBudget: function () {
 
 
@@ -352,7 +364,7 @@ let  controller = (function (budgetCtrl, UICtrl) {
 			ID = splitID[1];
 
 			//1. deletes item from the data strudture in JS
-
+			budgetCtrl.deleteItem(type, ID);
 
 
 			//2. Deletes the item from the UI in HTML
