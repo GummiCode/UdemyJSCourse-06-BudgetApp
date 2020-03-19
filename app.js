@@ -174,6 +174,9 @@ return {
 	},
 
 
+//////////////////////// Function to add an item to the HTML
+
+
 	addListItem : function(obj, type) {
 		
 		// create HTML in this JS file in the form of a string, with some placeholder text
@@ -219,6 +222,19 @@ return {
 
 		document.querySelector(element).insertAdjacentHTML('beforeend', newhtml);		
 	},
+
+/////////////////////////// Function to delete an item from the HTML
+
+	deleteListItem: function (selectorID) {
+
+		let el = document.getElementById(selectorID);
+		el.parentNode.removeChild(el); 					// Weird syntax, but that's how it works! ^__^
+
+	},
+
+
+
+	////////////////////// Function to clear the form after an item is created
 
 	clearFields: function() {
 		let fields, fieldsArray;
@@ -370,11 +386,11 @@ let  controller = (function (budgetCtrl, UICtrl) {
 
 
 			//2. Deletes the item from the UI in HTML
-
+			UICtrl.deleteListItem(itemID);
 
 			
 			//3. updates and shows the new budget.
-
+			updateBudget();
 	 };
 
 	};
