@@ -84,12 +84,14 @@ return {
 			//the .map method performs a function on each element in an array, and returns a new array using the outputs.
 			ids =	data.allItems[type].map(function(current){
 			return current.id;
+			});
+
 			index = ids.indexOf(id);
 			if (index !== -1) {
 				data.allItems[type].splice(index, 1);
 			};
-		});
 		},
+	
 
 		calculateBudget: function () {
 
@@ -361,7 +363,7 @@ let  controller = (function (budgetCtrl, UICtrl) {
 	
 			splitID = itemID.split('-'); //the split method splits a tring after the designated character & returns both parts as an array
 			type = splitID[0];
-			ID = splitID[1];
+			ID = parseInt(splitID[1]);	// parseInt is to change the ID, which is a string numeric digit, into a number.
 
 			//1. deletes item from the data strudture in JS
 			budgetCtrl.deleteItem(type, ID);
