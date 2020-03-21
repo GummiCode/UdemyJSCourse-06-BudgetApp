@@ -12,7 +12,24 @@ let Expense = function (id, description, value) {
 	this.description = description;
 	this.value = value;
 	this.percentage = -1;
+
 };
+
+
+Expense.prototype.calcPercentage =  function(totalIncome) {
+	if (totalIncome > 0) {
+	this.percentage = Math.round ((this.value / totalIncome) * 100);
+	} else {
+		this.percentage = -1;
+	};
+
+};
+
+
+Expense.prototype.getPercentage = function () {
+	return this.percentage;
+};
+
 
 let Income = function (id, description, value) {
 	this.id = id;
@@ -110,6 +127,23 @@ return {
 				 data.percentage = -1;
 			 };
 		},
+
+
+		calculatePercentages: function () {
+
+			data.allItems.exp.forEach(function (cur) {
+				cur.calcPercentage(data.totals.inc);
+			});
+		},
+
+
+		getPercentages: function (){
+
+			let allPerc = data.allItems.exp.map(function(cur) {
+				return cur.getPercentage();
+			});
+			return allPerc;
+		},
 		
 		getBudget: function () {
 			return {
@@ -154,6 +188,7 @@ let DOMStrings = {
 	expensesLabel: '.budget__expenses--value',
 	percentageLabel:	'.budget__expenses--percentage',
 	container: '.container',
+	expensesPercLabel: '.item__percentage',
 
 };
 
@@ -213,7 +248,7 @@ return {
 		// Replace the placeolder text with input data ('id', 'description', 'value')
 
 		newhtml = html.replace(`%id%`, obj.id);
-		console.log(obj.description);
+		//console.log(obj.description);
 		newhtml = newhtml.replace(`%description%`, obj.description);
 		newhtml = newhtml.replace(`%value%`, obj.value);
 
@@ -267,9 +302,9 @@ return {
 
 	displayBudget: function (obj) {
 
-		console.log (obj);
-		console.log(DOMStrings);
-		console.log(document.querySelector(DOMStrings.incomeLabel));
+		//console.log (obj);
+		//console.log(DOMStrings);
+		// console.log(document.querySelector(DOMStrings.incomeLabel));
 
 		document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
 		document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
@@ -283,6 +318,27 @@ return {
 		};
 
 	},
+
+	displayPercentages: function (percentages) {
+
+		let fields  = document.querySelectorAll(DOMStrings.expensesPercLabel);
+
+		let nodeListForEach = function (list, callback) {
+			for (var i = 0; i < list.length; i++) {
+				callback(list[i], i);
+			};
+
+		};
+
+		nodeListForEach(fields, function(current, index){
+			if (percentages[index] > 0) {
+				current.textContent = percentages[index] + `%`;
+			} else {
+				current.textContent = `---`;
+			};
+		});
+	},
+
 
 	getDOMStrings : function () { // This block exposes the DOMStrings to the public/global scope for other modules to access.
 		return DOMStrings;
@@ -335,8 +391,19 @@ let  controller = (function (budgetCtrl, UICtrl) {
 			//3. Display the budget on the UI
 			UICtrl.displayBudget(budget);
 
+	};
 
 
+	let updatePercentages = function () {
+
+		// 1. Calculate percentages
+		budgetCtrl.calculatePercentages();
+
+		//2. Read them from the budget controller
+		let percentages = budgetCtrl.getPercentages();
+
+		//3. Update the UI
+		UICtrl.displayPercentages(percentages);
 	};
 
 	let ctrlAddItem = function (){
@@ -345,7 +412,7 @@ let  controller = (function (budgetCtrl, UICtrl) {
 			
 			// 1. Insert function for getting the field input data,
 			input = UIController.getInput();
-			console.log(input); 
+			//console.log(input); 
 
 			// 2. Check that the description field is not empty,
 			// & check that a number (!isNaN) is entered in the Value field,
@@ -365,6 +432,9 @@ let  controller = (function (budgetCtrl, UICtrl) {
 
 			// 6. Calculate and update budget.
 			updateBudget();
+
+			//7.  Calculate and update the percentages.
+			updatePercentages();
 
 		};
 	};
@@ -391,6 +461,9 @@ let  controller = (function (budgetCtrl, UICtrl) {
 			
 			//3. updates and shows the new budget.
 			updateBudget();
+
+			//4. Update the percentages.
+			updatePercentages();
 	 };
 
 	};
