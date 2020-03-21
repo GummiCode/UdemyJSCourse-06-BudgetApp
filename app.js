@@ -180,7 +180,7 @@ let DOMStrings = {
 	inputType: 	'.add__type',
 	inputDescription: '.add__description',
 	inputValue:	'.add__value',
-	inputButton: '.add__btn',
+	inputBtn: '.add__btn',
 	incomeContainer: '.income__list',		//These will be used to point to the placed in the HTML document
 	expensesContainer: '.expenses__list',		//where we'll insert code for our various items.
 	budgetLabel: '.budget__value',				//The class of the current budget display.
@@ -189,6 +189,7 @@ let DOMStrings = {
 	percentageLabel:	'.budget__expenses--percentage',
 	container: '.container',
 	expensesPercLabel: '.item__percentage',
+	dateLabel: '.budget__title--month', 
 
 };
 
@@ -215,6 +216,13 @@ let formatNumber =  function (num, type) {
 	
 	/* I've commented out the code here that assigns a +/- symbol to the value. The existing code already doens this, possible via tht HTML?, so including this code causes '++' or '--' to appear before each value. The course says to include this code; I have opmitted it.
 	*/
+};
+
+let nodeListForEach = function (list, callback) {
+	for (var i = 0; i < list.length; i++) {
+		callback(list[i], i);
+	};
+
 };
 
 //////////////////////////
@@ -343,12 +351,7 @@ return {
 
 		let fields  = document.querySelectorAll(DOMStrings.expensesPercLabel);
 
-		let nodeListForEach = function (list, callback) {
-			for (var i = 0; i < list.length; i++) {
-				callback(list[i], i);
-			};
 
-		};
 
 		nodeListForEach(fields, function(current, index){
 			if (percentages[index] > 0) {
@@ -359,6 +362,33 @@ return {
 		});
 	},
 
+
+	displayDate: function () {
+		let now, year, month, months;
+
+		months = [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`];
+
+		now = new Date();
+		year = now.getFullYear();
+		month = now.getMonth();
+		document.querySelector(DOMStrings.dateLabel).textContent = months[month] + ` ` + year;
+
+	},
+
+	changedType: function () {
+
+		let fields = document.querySelectorAll(
+			DOMStrings.inputType + `,` +
+			DOMStrings.inputDescription + `,` +
+			DOMStrings.inputValue); 
+
+		nodeListForEach(fields, function (cur) {
+			cur.classList.toggle(`red-focus`);
+		});
+
+		document.querySelector(DOMStrings.inputBtn).classList.toggle('red');
+
+	},
 
 	getDOMStrings : function () { // This block exposes the DOMStrings to the public/global scope for other modules to access.
 		return DOMStrings;
@@ -385,7 +415,7 @@ let  controller = (function (budgetCtrl, UICtrl) {
 
 		let DOM = UICtrl.getDOMStrings();  // This line adds the DOM strings (defined in UI COntroller) to this module :3
 
-		document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
+		document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
 		document.addEventListener('keypress', function (event) {
 			if (event.keycode === 13 || event.which === 13) {
@@ -395,7 +425,9 @@ let  controller = (function (budgetCtrl, UICtrl) {
 
 
 		document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+	
 
+		document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
 
 	};
 
@@ -497,6 +529,7 @@ let  controller = (function (budgetCtrl, UICtrl) {
 		return  {											
 			init: function () {						
 				setupEventListeners(); //Initialisation Function PArt 1: This function, when called, activtes the event listeners.
+				UICtrl.displayDate();
 				UICtrl.displayBudget({
 						budget: 0,
 						totalExp: 0,
