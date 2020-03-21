@@ -193,7 +193,29 @@ let DOMStrings = {
 };
 
 
+let formatNumber =  function (num, type) {
+	let numSplit;
 
+	/*
+	+ or - before the number
+	exactly 2 decimal places
+	comma seperating the thousands
+	*/
+
+	num = Math.abs(num);
+	num = num.toFixed(2);
+	numSplit = num.split(`.`) //splits the number into the part before decimal and part after decimal; returns as array.
+	int = numSplit[0];			// Integer part of the numSplit array is stored as int;
+	if (int.length >3) {		// Adds comma at 1,000 if digits > 3.
+	int = int.substr(0, int.length - 3) + `,` + int.substr(int.length-3, int.length);
+	};
+	dec = numSplit[1];			// Decimal part of numSplit array is stored as dec;
+	
+	return (type === `exp` ? `-` : `+`) + ` ` + int + `.` + dec;	//Returns the number in the desired format.
+	
+	/* I've commented out the code here that assigns a +/- symbol to the value. The existing code already doens this, possible via tht HTML?, so including this code causes '++' or '--' to appear before each value. The course says to include this code; I have opmitted it.
+	*/
+};
 
 //////////////////////////
 //Public Space
@@ -223,7 +245,7 @@ return {
 				<div class="item clearfix" id="inc-%id%">
                             <div class="item__description">%description%</div>
                             <div class="right clearfix">
-								<div class="item__value">+ %value%</div>
+								<div class="item__value">%value%</div>
                                 <div class="item__delete">
                                     <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
                                 </div>
@@ -236,7 +258,7 @@ return {
 				<div class="item clearfix" id="exp-%id%">
                             <div class="item__description">%description%</div>
                             <div class="right clearfix">
-                                <div class="item__value">- %value%</div>
+                                <div class="item__value">%value%</div>
                                 <div class="item__percentage">21%</div>
                                 <div class="item__delete">
                                     <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button>
@@ -250,7 +272,7 @@ return {
 		newhtml = html.replace(`%id%`, obj.id);
 		//console.log(obj.description);
 		newhtml = newhtml.replace(`%description%`, obj.description);
-		newhtml = newhtml.replace(`%value%`, obj.value);
+		newhtml = newhtml.replace(`%value%`, formatNumber(obj.value, type));
 
 		// Insert the string HTML from this file into the DOM as actual HTML
 		// We'll insert it in the beforeend position
@@ -302,13 +324,11 @@ return {
 
 	displayBudget: function (obj) {
 
-		//console.log (obj);
-		//console.log(DOMStrings);
-		// console.log(document.querySelector(DOMStrings.incomeLabel));
+		obj.budget > 0 ? type = `inc` : type = `exp`;
 
-		document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
-		document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
-		document.querySelector(DOMStrings.expensesLabel).textContent = obj.totalExp;
+		document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber (obj.budget, type)
+		document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber (obj.totalInc, `inc`);
+		document.querySelector(DOMStrings.expensesLabel).textContent = formatNumber (obj.totalExp, `exp`);
 
 		if (obj.percentage > 0 ) {
 			document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%';
